@@ -58,6 +58,10 @@
                                       IconData="{Binding Icons.Arrow, Source={StaticResource ServiceLocator}}"
                                       CommandParameter="{x:Static captura:OverlayPage.Instance}"/>
 
+                <captura:ModernButton Content="Translation"
+                                      IconData="{Binding Icons.Text, Source={StaticResource ServiceLocator}}"
+                                      CommandParameter="/Pages/TranslationPage.xaml"/>
+
                 <captura:ModernButton Content="{Binding About, Source={StaticResource Loc}, Mode=OneWay}"
                                       IconData="{Binding Icons.Help, Source={StaticResource ServiceLocator}}"
                                       CommandParameter="/Pages/AboutPage.xaml"/>
