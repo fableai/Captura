@@ -9,6 +9,7 @@ using Captura.Loc;
 using Captura.Models;
 using Captura.MouseKeyHook;
 using Captura.MouseKeyHook.Steps;
+using Captura.Services;
 using Captura.Video;
 using Captura.Webcam;
 using Microsoft.Win32;

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
@@ -7,5 +7,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Captura.Audio\Captura.Audio.csproj" />
+    <ProjectReference Include="..\Captura.Base\Captura.Base.csproj" />
   </ItemGroup>
 </Project>

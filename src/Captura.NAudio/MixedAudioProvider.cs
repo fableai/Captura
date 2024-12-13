@@ -1,18 +1,21 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using Captura.Services;
 
 namespace Captura.Audio
 {
     class MixedAudioProvider : IAudioProvider
     {
         readonly Dictionary<NAudioProvider, ISampleProvider> _audioProviders = new Dictionary<NAudioProvider, ISampleProvider>();
-
         readonly IWaveProvider _mixingWaveProvider;
+        readonly ITranslationService _translationService;
 
-        public MixedAudioProvider(params NAudioProvider[] AudioProviders)
+        public MixedAudioProvider(ITranslationService TranslationService, params NAudioProvider[] AudioProviders)
         {
+            _translationService = TranslationService;
+
             foreach (var provider in AudioProviders)
             {
                 var bufferedProvider = new BufferedWaveProvider(provider.NAudioWaveFormat)
@@ -21,9 +24,15 @@ namespace Captura.Audio
                     ReadFully = false
                 };
 
-                provider.WaveIn.DataAvailable += (S, E) =>
+                provider.WaveIn.DataAvailable += async (S, E) =>
                 {
                     bufferedProvider.AddSamples(E.Buffer, 0, E.BytesRecorded);
+
+                    // Stream audio data to translation service if connected
+                    if (_translationService?.IsConnected == true)
+                    {
+                        await _translationService.StreamAudioData(E.Buffer, E.BytesRecorded);
+                    }
                 };
 
                 var sampleProvider = bufferedProvider.ToSampleProvider();
