@@ -1,10 +1,11 @@
-﻿using Captura.Models;
+using Captura.Models;
 using Captura.Audio;
 using Captura.FFmpeg;
 using Captura.Hotkeys;
 using Captura.Imgur;
 using Captura.Loc;
 using Captura.MouseKeyHook;
+using Captura.Services;
 using Captura.SharpAvi;
 using Captura.Video;
 using Captura.ViewModels;
@@ -69,6 +70,7 @@ namespace Captura
             Binder.BindSingleton<RecordingModel>();
             Binder.BindSingleton<WebcamModel>();
             Binder.BindSingleton<KeymapViewModel>();
+            Binder.BindSingleton<TranslationService>();
         }
 
         static void BindUpdateChecker(IBinder Binder)

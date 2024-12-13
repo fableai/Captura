@@ -247,6 +247,12 @@ namespace Captura.ViewModels
 
         public bool StartRecording(RecordingModelParams RecordingParams, string FileName = null)
         {
+            // Start translation service if enabled
+            if (Settings.Translation.Enabled)
+            {
+                ServiceProvider.Get<TranslationService>()?.Start(Settings.Translation.ApiKey);
+            }
+
             IsVideo = !(RecordingParams.VideoSourceKind is NoVideoSourceProvider);
 
             var extension = RecordingParams.VideoWriter.Extension;
@@ -428,6 +434,12 @@ namespace Captura.ViewModels
 
         void AfterRecording()
         {
+            // Stop translation service if enabled
+            if (Settings.Translation.Enabled)
+            {
+                ServiceProvider.Get<TranslationService>()?.Stop();
+            }
+
             _pauseNotification?.Remove();
 
             RecorderState = RecorderState.NotRecording;
@@ -498,6 +510,21 @@ namespace Captura.ViewModels
                 () => _timerModel.TimeSpan);
 
             yield return new ElapsedOverlay(Settings.Elapsed, () => _timerModel.TimeSpan);
+
+            // Translation Overlay
+            if (Settings.Translation.Enabled)
+            {
+                var settings = new TextOverlaySettings
+                {
+                    Display = true,
+                    FontSize = 20,
+                    HorizontalAlignment = Alignment.End,
+                    VerticalAlignment = Alignment.End,
+                    BackgroundColor = System.Drawing.Color.FromArgb(200, 0, 0, 0),
+                    FontColor = System.Drawing.Color.White
+                };
+                yield return new TranslationOverlay(settings);
+            }
 
             // Text Overlays
             foreach (var overlay in Settings.TextOverlays)
